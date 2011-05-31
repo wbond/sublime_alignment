@@ -2,7 +2,6 @@ import sublime
 import sublime_plugin
 
 class AlignmentCommand(sublime_plugin.TextCommand):
-	@handles_not_found
 	def run(self, edit):
 		view = self.view
 		region_set = view.sel()
