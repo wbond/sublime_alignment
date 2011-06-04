@@ -1,6 +1,6 @@
 = Sublime Alignment
 
-This Sublime Text 2 (http://www.sublimetext.com/2) plugin provides a simple key-binding for aligning multiple selections.
+A Sublime Text 2 (http://www.sublimetext.com/2) plugin that provides a simple key-binding for aligning multi-line selections and multiple selections.
 
 == Installation
 
@@ -8,7 +8,73 @@ Simply copy the "Alignment" folder to the folder that is opened when clicking th
 
 == Usage
 
-Open a file and make multiple selections. Press ctrl+shift+a (Windows, Linux) or cmd+shift+a (OS X) and spaces will be inserted at each cursor to cause them to be aligned to the same column.
+Press ctrl+shift+a (Windows, Linux) or cmd+shift+a (OS X). The following examples use a {{{|}}} to indicate a cursor. {{{<<<}}} indicates the beginning of a selection and {{{>>>}}} indicates the end of a selection.
+
+If multiple lines are selected within a single selection and the left edges are not indented to the same level, all lines will be shifted to have a consistent indent level. The indentation will follow the current indentation preferences, either spaces or tabs.
+
+Before:
+
+{{{
+<<<
+var foo = 1;
+  var bazz = foo;
+	var qu = foo + bazz;
+>>>
+}}}
+
+After:
+
+{{{
+<<<
+	var foo = 1;
+	var bazz = foo;
+	var qu = foo + bar;
+>>>
+}}}
+
+If multiple lines are selected with a single selection and all selected lines have the same indent level, the first equal sign on each line will all be aligned to the same column, using spaces.
+
+Before:
+
+{{{
+<<<
+	var foo = 1;
+	var bazz = foo;
+	var qu = foo + bar;
+>>>
+}}}
+
+After:
+
+{{{
+<<<
+	var foo  = 1;
+	var bazz = foo;
+	var qu   = foo + bar;
+>>>
+}}}
+
+If multiple selections exist, spaces will be inserted to cause all selections to be aligned to the same column.
+
+Before:
+
+{{{
+array(
+	'foo'| => 1,
+	'bazz'| => 2,
+	'qu'| => 3
+)
+}}}
+
+After:
+
+{{{
+array(
+	'foo' | => 1,
+	'bazz'| => 2,
+	'qu'  | => 3
+)
+}}}
 
 == License
 
