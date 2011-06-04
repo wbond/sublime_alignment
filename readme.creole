@@ -78,9 +78,7 @@ array(
 
 == License
 
-All of Sublime Tortoise is licensed under the MIT license, except for the
-files located in the svn subfolder, which are licensed according to the
-LICENSE file therein.
+All of Sublime Alignment is licensed under the MIT license.
 
   Copyright (c) 2011 Will Bond <will@wbond.net>
 
