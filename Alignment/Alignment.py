@@ -2,6 +2,8 @@ import sublime
 import sublime_plugin
 
 class AlignmentCommand(sublime_plugin.TextCommand):
+	operator_chars = ['+', '-', '&', '|', '<', '>', '!', '~', '%', '/', '*', '.']
+
 	def run(self, edit):
 		view = self.view
 		selection = view.sel()
@@ -61,14 +63,25 @@ class AlignmentCommand(sublime_plugin.TextCommand):
 				for row in line_nums:
 					pt = view.text_point(row, 0)
 					equal_pt = view.find('=', pt).a
+					
+					insert_pt = equal_pt
+					# If the equal sign is part of a multi-character
+					# operator, bring the first character forward also
+					if view.substr(insert_pt-1) in self.operator_chars:
+						insert_pt -= 1
 
+					space_pt = insert_pt
+					while view.substr(space_pt-1) == ' ':
+						space_pt -= 1
+					space_pt += 1
+					
 					# If the next equal sign is not on this line, skip the line
 					if view.rowcol(equal_pt)[0] != row:
 						continue
 					
-					points.append(equal_pt)
-					max_col = max([max_col, view.rowcol(equal_pt)[1]])
-				
+					points.append(insert_pt)
+					max_col = max([max_col, view.rowcol(space_pt)[1]])
+
 				# The adjustment takes care of correcting point positions
 				# since spaces are being inserted, which changes the points
 				adjustment = 0
@@ -76,13 +89,10 @@ class AlignmentCommand(sublime_plugin.TextCommand):
 					pt += adjustment
 					length = max_col - view.rowcol(pt)[1]
 					adjustment += length
-
-					# If the character before the = is not a space align that
-					# char also, which handles +=, etc
-					if view.substr(pt-1) != ' ':
-						pt -= 1
-
-					view.insert(edit, pt, ' ' * length)
+					if length >= 0:
+						view.insert(edit, pt, ' ' * length)
+					else:
+						view.erase(edit, sublime.Region(pt + length, pt))
 
 		# This handles aligning multiple selections
 		else:
