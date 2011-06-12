@@ -4,7 +4,7 @@ A Sublime Text 2 (http://www.sublimetext.com/2) plugin that provides a simple ke
 
 == Installation
 
-Simply copy the "Alignment" folder to the folder that is opened when clicking the "Preferences > Browse Packages..." menu entry.
+Simply clone the repository into a new "Alignment" folder in the Sublime Text 2 Packages directory on your machine. The Packages directory can be found via the "Preferences > Browse Packages..." menu entry.
 
 == Usage
 
