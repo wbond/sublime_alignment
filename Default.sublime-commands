@@ -1,0 +1,26 @@
+[
+    {
+        "caption": "Preferences: Alignment Key Bindings",
+        "command": "open_file", "args":
+        {
+            "file": "${packages}/Alignment/Default (Windows).sublime-keymap",
+            "platform": "Windows"
+        }
+    },
+    {
+        "caption": "Preferences: Alignment Key Bindings",
+        "command": "open_file", "args":
+        {
+            "file": "${packages}/Alignment/Default (OSX).sublime-keymap",
+            "platform": "OSX"
+        }
+    },
+    {
+        "caption": "Preferences: Alignment Key Bindings",
+        "command": "open_file", "args":
+        {
+            "file": "${packages}/Alignment/Default (Linux).sublime-keymap",
+            "platform": "Linux"
+        }
+    }
+]
