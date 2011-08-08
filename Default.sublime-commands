@@ -1,25 +1,67 @@
 [
     {
-        "caption": "Preferences: Alignment Key Bindings",
-        "command": "open_file", "args":
-        {
+        "caption": "Preferences: Alignment File Settings – Default",
+        "command": "open_file",
+        "args": {
+            "file": "${packages}/Terminal/Base File.sublime-settings"
+        }
+    },
+    {
+        "caption": "Preferences: Alignment File Settings – User",
+        "command": "open_file",
+        "args": {
+            "file": "${packages}/User/Base File.sublime-settings"
+        }
+    },
+    {
+        "caption": "Preferences: Alignment File Settings – Syntax Specific – User",
+        "command": "open_file_settings"
+    },
+    {
+        "caption": "Preferences: Alignment Key Bindings – Default",
+        "command": "open_file",
+        "args": {
             "file": "${packages}/Alignment/Default (Windows).sublime-keymap",
             "platform": "Windows"
         }
     },
     {
-        "caption": "Preferences: Alignment Key Bindings",
-        "command": "open_file", "args":
-        {
+        "caption": "Preferences: Alignment Key Bindings – Default",
+        "command": "open_file",
+        "args": {
             "file": "${packages}/Alignment/Default (OSX).sublime-keymap",
             "platform": "OSX"
         }
     },
     {
-        "caption": "Preferences: Alignment Key Bindings",
-        "command": "open_file", "args":
-        {
+        "caption": "Preferences: Alignment Key Bindings – Default",
+        "command": "open_file",
+        "args": {
             "file": "${packages}/Alignment/Default (Linux).sublime-keymap",
+            "platform": "Linux"
+        }
+    },
+    {
+        "caption": "Preferences: Alignment Key Bindings – User",
+        "command": "open_file",
+        "args": {
+            "file": "${packages}/User/Default (Windows).sublime-keymap",
+            "platform": "Windows"
+        }
+    },
+    {
+        "caption": "Preferences: Alignment Key Bindings – User",
+        "command": "open_file",
+        "args": {
+            "file": "${packages}/User/Default (OSX).sublime-keymap",
+            "platform": "OSX"
+        }
+    },
+    {
+        "caption": "Preferences: Alignment Key Bindings – User",
+        "command": "open_file",
+        "args": {
+            "file": "${packages}/User/Default (Linux).sublime-keymap",
             "platform": "Linux"
         }
     }

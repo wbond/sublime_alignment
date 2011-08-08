@@ -1,0 +1,20 @@
+{
+	// If the indent level of a multi-line selection should be aligned
+	"align_indent": true,
+
+	// The mid-line characters to align in a multi-line selection, changing
+	// this to an empty array will disable mid-line alignment
+	"alignment_chars": ["="],
+
+	// If the following character is matched for alignment, insert a space
+	// before it in the final alignment
+	"alignment_space_chars": ["="],
+
+	// The characters to align along with "alignment_chars"
+	// For instance if the = is to be aligned, there are a number of
+	// symbols that can be combined with the = to make an operator, and all
+	// of those must be kept next to the = for the operator to be parsed
+	"alignment_prefix_chars": [
+		"+", "-", "&", "|", "<", ">", "!", "~", "%", "/", "*", "."
+	]
+}

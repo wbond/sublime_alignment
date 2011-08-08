@@ -76,6 +76,16 @@ array(
 )
 }}}
 
+== Settings
+
+Using the //Preferences > Package Settings > Alignment// menu or the command
+palette it is possible to customize the plugin to:
+
+* Disable indent alignment
+* Perform mid-line alignment on characters other than an {{{=}}}
+* Tweak what characters are aligned with the {{{=}}}
+* Set the alignment settings per syntax, e.g. to align {{{:}}} in JSON
+
 == License
 
 All of Sublime Alignment is licensed under the MIT license.

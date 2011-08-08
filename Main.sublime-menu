@@ -16,48 +16,62 @@
                         "children":
                         [
                             {
-                                "command": "open_file", "args":
-                                {
+                                "command": "open_file", 
+                                "args": {"file": "${packages}/Alignment/Base File.sublime-settings"},
+                                "caption": "Settings – Default"
+                            },
+                            {
+                                "command": "open_file", 
+                                "args": {"file": "${packages}/User/Base File.sublime-settings"},
+                                "caption": "Settings – User"
+                            },
+                            {
+                                "command": "open_file_settings", 
+                                "caption": "Settings – Syntax Specific – User"
+                            },
+                            {
+                                "command": "open_file",
+                                "args": {
                                     "file": "${packages}/Alignment/Default (Windows).sublime-keymap",
                                     "platform": "Windows"
                                 },
                                 "caption": "Key Bindings – Default"
                             },
                             {
-                                "command": "open_file", "args":
-                                {
+                                "command": "open_file",
+                                "args": {
                                     "file": "${packages}/Alignment/Default (OSX).sublime-keymap",
                                     "platform": "OSX"
                                 },
                                 "caption": "Key Bindings – Default"
                             },
                             {
-                                "command": "open_file", "args":
-                                {
+                                "command": "open_file",
+                                "args": {
                                     "file": "${packages}/Alignment/Default (Linux).sublime-keymap",
                                     "platform": "Linux"
                                 },
                                 "caption": "Key Bindings – Default"
                             },
                             {
-                                "command": "open_file", "args":
-                                {
+                                "command": "open_file",
+                                "args": {
                                     "file": "${packages}/User/Default (Windows).sublime-keymap",
                                     "platform": "Windows"
                                 },
                                 "caption": "Key Bindings – User"
                             },
                             {
-                                "command": "open_file", "args":
-                                {
+                                "command": "open_file",
+                                "args": {
                                     "file": "${packages}/User/Default (OSX).sublime-keymap",
                                     "platform": "OSX"
                                 },
                                 "caption": "Key Bindings – User"
                             },
                             {
-                                "command": "open_file", "args":
-                                {
+                                "command": "open_file",
+                                "args": {
                                     "file": "${packages}/User/Default (Linux).sublime-keymap",
                                     "platform": "Linux"
                                 },
