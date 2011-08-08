@@ -132,8 +132,8 @@ class AlignmentCommand(sublime_plugin.TextCommand):
 
         # This handles aligning multiple selections
         else:
-            max_col = max([view.rowcol(region.b)[1] for region in selection])
+            max_col = max([view.rowcol(region.b)[1] for region in sel])
 
-            for region in selection:
+            for region in sel:
                 length = max_col - view.rowcol(region.b)[1]
                 view.insert(edit, region.b, ' ' * length)
