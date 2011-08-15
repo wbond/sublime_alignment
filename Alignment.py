@@ -105,8 +105,14 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                         insert_pt -= 1
 
                     space_pt = insert_pt
-                    while view.substr(space_pt-1) == ' ':
+                    while view.substr(space_pt-1) in [' ', '\t']:
                         space_pt -= 1
+                        # Replace tabs with spaces for consistent indenting
+                        if view.substr(space_pt) == '\t':
+                            view.replace(edit, sublime.Region(space_pt,
+                                space_pt+1), ' ' * tab_size)
+                            matching_char_pt += tab_size - 1
+                            insert_pt += tab_size - 1
 
                     if view.substr(matching_char_pt) in alignment_space_chars:
                         space_pt += 1
