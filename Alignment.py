@@ -1,6 +1,26 @@
 import sublime
 import sublime_plugin
 import re
+import math
+from indentation import line_and_normed_pt as normed_rowcol
+
+def convert_to_mid_line_tabs(view, edit, tab_size, pt, length):
+    spaces_end = pt + length
+    spaces_start = spaces_end
+    while view.substr(spaces_start-1) == ' ':
+        spaces_start -= 1
+    spaces_len = spaces_end - spaces_start
+    normed_start = normed_rowcol(view, spaces_start)[1]
+    normed_mod = normed_start % tab_size
+    tabs_len = 0
+    if normed_mod:
+        tabs_len += 1
+    tabs_len += int(math.ceil(float(spaces_len - normed_mod)
+        / float(tab_size)))
+    view.replace(edit, sublime.Region(spaces_start,
+        spaces_end), '\t' * tabs_len)
+    return tabs_len - spaces_len
+
 
 class AlignmentCommand(sublime_plugin.TextCommand):
     def run(self, edit):
@@ -9,11 +29,11 @@ class AlignmentCommand(sublime_plugin.TextCommand):
         max_col = 0
 
         settings = view.settings()
+        tab_size = int(settings.get('tab_size', 8))
+        use_spaces = settings.get('translate_tabs_to_spaces')
 
         # This handles aligning single multi-line selections
         if len(sel) == 1:
-            tab_size = int(settings.get('tab_size', 8))
-            use_spaces = settings.get('translate_tabs_to_spaces')
             points = []
             line_nums = [view.rowcol(line.a)[0] for line in view.lines(sel[0])]
 
@@ -122,24 +142,32 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                         continue
 
                     points.append(insert_pt)
-                    max_col = max([max_col, view.rowcol(space_pt)[1]])
+                    max_col = max([max_col, normed_rowcol(view, space_pt)[1]])
 
                 # The adjustment takes care of correcting point positions
                 # since spaces are being inserted, which changes the points
                 adjustment = 0
                 for pt in points:
                     pt += adjustment
-                    length = max_col - view.rowcol(pt)[1]
+                    length = max_col - normed_rowcol(view, pt)[1]
                     adjustment += length
                     if length >= 0:
                         view.insert(edit, pt, ' ' * length)
                     else:
                         view.erase(edit, sublime.Region(pt + length, pt))
 
+                    if settings.get('mid_line_tabs') and not use_spaces:
+                        adjustment += convert_to_mid_line_tabs(view, edit,
+                            tab_size, pt, length)
+
+
         # This handles aligning multiple selections
         else:
-            max_col = max([view.rowcol(region.b)[1] for region in sel])
+            max_col = max([normed_rowcol(view, region.b)[1] for region in sel])
 
             for region in sel:
-                length = max_col - view.rowcol(region.b)[1]
+                length = max_col - normed_rowcol(view, region.b)[1]
                 view.insert(edit, region.b, ' ' * length)
+                if settings.get('mid_line_tabs') and not use_spaces:
+                    convert_to_mid_line_tabs(view, edit, tab_size, region.b,
+                        length)
