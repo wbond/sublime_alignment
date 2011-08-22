@@ -13,9 +13,11 @@ def convert_to_mid_line_tabs(view, edit, tab_size, pt, length):
     normed_start = normed_rowcol(view, spaces_start)[1]
     normed_mod = normed_start % tab_size
     tabs_len = 0
-    if normed_mod:
+    diff = 0
+    if normed_mod != 0:
+        diff = tab_size - normed_mod
         tabs_len += 1
-    tabs_len += int(math.ceil(float(spaces_len - normed_mod)
+    tabs_len += int(math.ceil(float(spaces_len - diff)
         / float(tab_size)))
     view.replace(edit, sublime.Region(spaces_start,
         spaces_end), '\t' * tabs_len)
