@@ -2,7 +2,17 @@ import sublime
 import sublime_plugin
 import re
 import math
-from indentation import line_and_normed_pt as normed_rowcol
+import os
+import sys
+
+# This is necessary due to load order of packages in Sublime Text 2
+sys.path.append(os.path.join(sublime.packages_path(), 'Default'))
+indentation = __import__('indentation')
+reload(indentation)
+del sys.path[-1]
+
+normed_rowcol = indentation.line_and_normed_pt
+
 
 def convert_to_mid_line_tabs(view, edit, tab_size, pt, length):
     spaces_end = pt + length
