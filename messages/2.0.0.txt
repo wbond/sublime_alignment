@@ -1,0 +1,5 @@
+Sublime Alignment 2.0.0 Changelog:
+- Removed the ctrl+shift+a shortcut on Windows/Linux and the cmd+shift+a
+  shortcut on OS X to prevent conflict with the shortcut for Expand to Tag.
+  The plugin is now triggered via ctrl+alt+a on Windows/Linux and ctrl+cmd+a
+  on OS X.
