@@ -5,10 +5,10 @@ import math
 import os
 import sys
 
-if sys.version.split(' ')[0] > "2.6.7":
+try:
     import Default.indentation
     normed_rowcol = Default.indentation.line_and_normed_pt
-else:
+except ImportError:
     # This is necessary due to load order of packages in Sublime Text 2
     sys.path.append(os.path.join(sublime.packages_path(), 'Default'))
     indentation = __import__('indentation')
