@@ -24,5 +24,11 @@
 	// of those must be kept next to the = for the operator to be parsed
 	"alignment_prefix_chars": [
 		"+", "-", "&", "|", "<", ">", "!", "~", "%", "/", "*", "."
-	]
+	],
+
+   // This plugin can either align the selected lines by adding spaces
+   // between the "alignment_chars" and the text to the left of it
+   // (mid_line whitespace) or by adding the spaces to the left of the
+   // entire line (which doesn't add whitespace to the middle of the line).
+   "add_mid_line_whitespace": true
 }

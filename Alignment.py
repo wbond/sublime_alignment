@@ -43,6 +43,7 @@ class AlignmentCommand(sublime_plugin.TextCommand):
         settings = view.settings()
         tab_size = int(settings.get('tab_size', 8))
         use_spaces = settings.get('translate_tabs_to_spaces')
+        add_mid_line_whitespace = settings.get('add_mid_line_whitespace')
 
         # This handles aligning single multi-line selections
         if len(sel) == 1:
@@ -151,20 +152,31 @@ class AlignmentCommand(sublime_plugin.TextCommand):
 
                     # If the next equal sign is not on this line, skip the line
                     if view.rowcol(matching_char_pt)[0] != row:
+                        points.append(-1)
                         continue
 
                     points.append(insert_pt)
+
                     max_col = max([max_col, normed_rowcol(view, space_pt)[1]])
 
                 # The adjustment takes care of correcting point positions
                 # since spaces are being inserted, which changes the points
                 adjustment = 0
+                row = 0
                 for pt in points:
+                    if pt == -1:
+                        continue
+
+                    textStart = view.text_point(line_nums[row], 0)
+                    row += 1
                     pt += adjustment
                     length = max_col - normed_rowcol(view, pt)[1]
                     adjustment += length
                     if length >= 0:
-                        view.insert(edit, pt, ' ' * length)
+                        if add_mid_line_whitespace:
+                            view.insert(edit, pt, ' ' * length)
+                        else:
+                            view.insert(edit, textStart, ' ' * length)
                     else:
                         view.erase(edit, sublime.Region(pt + length, pt))
 
