@@ -26,19 +26,19 @@
 		"+", "-", "&", "|", "<", ">", "!", "~", "%", "/", "*", "."
 	],
 
-   // This plugin can align the selected lines in a number of ways.
-   //   background-color: black;
-   //   color:            white;
-   // "alignment_format": "key-separator-varspace-value"
+	// This plugin can align the selected lines in a number of ways.
+	//   background-color: black;
+	//   color:            white;
+	// "alignment_format": "key-separator-varspace-value"
 
-   // ... or ...
-   //   background-color: black;
-   //              color: white;
-   // "alignment_format": "varspace-key-separator-value"
+	// ... or ...
+	//   background-color: black;
+	//              color: white;
+	// "alignment_format": "varspace-key-separator-value"
 
-   // ... or the default ...
-   //   background-color: black;
-   //   color           : white;
-   "alignment_format": "key-varspace-separator-value"
+	// ... or the default ...
+	//   background-color: black;
+	//   color           : white;
+	"alignment_format": "key-varspace-separator-value"
 
 }
