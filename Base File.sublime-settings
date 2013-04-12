@@ -26,9 +26,19 @@
 		"+", "-", "&", "|", "<", ">", "!", "~", "%", "/", "*", "."
 	],
 
-   // This plugin can either align the selected lines by adding spaces
-   // between the "alignment_chars" and the text to the left of it
-   // (mid_line whitespace) or by adding the spaces to the left of the
-   // entire line (which doesn't add whitespace to the middle of the line).
-   "add_mid_line_whitespace": true
+   // This plugin can align the selected lines in a number of ways.
+   //   background-color: black;
+   //   color:            white;
+   // "alignment_format": "key-separator-varspace-value"
+
+   // ... or ...
+   //   background-color: black;
+   //              color: white;
+   // "alignment_format": "varspace-key-separator-value"
+
+   // ... or the default ...
+   //   background-color: black;
+   //   color           : white;
+   "alignment_format": "key-varspace-separator-value"
+
 }

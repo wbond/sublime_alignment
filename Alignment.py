@@ -43,7 +43,9 @@ class AlignmentCommand(sublime_plugin.TextCommand):
         settings = view.settings()
         tab_size = int(settings.get('tab_size', 8))
         use_spaces = settings.get('translate_tabs_to_spaces')
-        add_mid_line_whitespace = settings.get('add_mid_line_whitespace')
+        alignment_format = settings.get('alignment_format')
+        if alignment_format == None:
+            alignment_format = "key-varspace-separator-value"
 
         # This handles aligning single multi-line selections
         if len(sel) == 1:
@@ -173,9 +175,11 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                     length = max_col - normed_rowcol(view, pt)[1]
                     adjustment += length
                     if length >= 0:
-                        if add_mid_line_whitespace:
+                        if alignment_format == "key-varspace-separator-value":
                             view.insert(edit, pt, ' ' * length)
-                        else:
+                        elif alignment_format == "key-separator-varspace-value":
+                            view.insert(edit, pt + 1, ' ' * length)
+                        elif alignment_format == "varspace-key-separator-value":
                             view.insert(edit, textStart, ' ' * length)
                     else:
                         view.erase(edit, sublime.Region(pt + length, pt))
