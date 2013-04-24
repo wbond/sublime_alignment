@@ -35,10 +35,21 @@ def convert_to_mid_line_tabs(view, edit, tab_size, pt, length):
 
 
 class AlignmentCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
+    def run(self, edit, **kwargs):
         view = self.view
         sel = view.sel()
         max_col = 0
+
+        begin = kwargs.get('begin', None)
+        end = kwargs.get('end', None)
+
+        if begin is not None and end is not None:
+            begin = int(begin)
+            end = int(end)
+
+            my_region = sublime.Region(begin, end)
+            sel.clear()
+            sel.add(my_region)
 
         settings = view.settings()
         tab_size = int(settings.get('tab_size', 8))
