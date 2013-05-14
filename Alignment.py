@@ -5,11 +5,7 @@ import math
 import os
 import sys
 
-# This is necessary due to load order of packages in Sublime Text 2
-sys.path.append(os.path.join(sublime.packages_path(), 'Default'))
-indentation = __import__('indentation')
-reload(indentation)
-del sys.path[-1]
+from Default import indentation
 
 normed_rowcol = indentation.line_and_normed_pt
 
