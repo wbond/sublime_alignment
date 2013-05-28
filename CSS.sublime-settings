@@ -1,3 +1,5 @@
 {
-	"alignment_chars": ["=", ":"]
+	  "alignment_chars": ["=", ":"],
+    "alignment_space_chars": ["=",":"],
+    "space_after_chars": ["=",":"]
 }
