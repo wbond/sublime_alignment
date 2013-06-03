@@ -208,17 +208,6 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                         adjustment += convert_to_mid_line_tabs(view, edit,
                                                                tab_size, pt, length)
 
-        # # This handles aligning single multi-line selections
-        # print len(sel)
-        # for line in view.lines(sel[0]):
-        #     print '%d\n' % view.rowcol(line.a)[0]
-
-        # if len(sel) == 0:
-        #     region = sublime.Region(0, view.size())
-        #     code = view.substr(region)
-        #     for line_nums in get_blocks(code):
-        #         align_lines(line_nums)
-
         if len(sel) == 1:
             if len(view.lines(sel[0])) == 1:
                 region = sublime.Region(0, view.size())
