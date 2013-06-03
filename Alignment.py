@@ -28,13 +28,53 @@ def convert_to_mid_line_tabs(view, edit, tab_size, pt, length):
         diff = tab_size - normed_mod
         tabs_len += 1
     tabs_len += int(math.ceil(float(spaces_len - diff)
-        / float(tab_size)))
+                              / float(tab_size)))
     view.replace(edit, sublime.Region(spaces_start,
-        spaces_end), '\t' * tabs_len)
+                                      spaces_end), '\t' * tabs_len)
     return tabs_len - spaces_len
 
 
+def blank(line):
+    return not line.strip()
+
+
+def get_indent_level(line):
+    indent_level = 0
+
+    for c in line:
+        if c == ' ' or c == '\t':
+            indent_level += 1
+        else:
+            break
+
+    return indent_level
+
+
+def get_blocks(code):
+    blocks = []
+    new_block = []
+    prev_indent_level = 0
+    for i, line in enumerate(code.split('\n')):
+        indent_level = get_indent_level(line)
+        if not blank(line) and (indent_level == prev_indent_level):
+            new_block.append(i)
+        else:
+            if len(new_block) > 0:
+                blocks.append(new_block)
+                new_block = []
+
+            if not blank(line):
+                new_block = [i]
+                prev_indent_level = indent_level
+
+    if new_block:
+        blocks.append(new_block)
+
+    return blocks
+
+
 class AlignmentCommand(sublime_plugin.TextCommand):
+
     def run(self, edit):
         view = self.view
         sel = view.sel()
@@ -44,11 +84,7 @@ class AlignmentCommand(sublime_plugin.TextCommand):
         tab_size = int(settings.get('tab_size', 8))
         use_spaces = settings.get('translate_tabs_to_spaces')
 
-        # This handles aligning single multi-line selections
-        if len(sel) == 1:
-            points = []
-            line_nums = [view.rowcol(line.a)[0] for line in view.lines(sel[0])]
-
+        def align_lines(line_nums):
             trim_trailing_white_space = \
                 settings.get('trim_trailing_white_space_on_save')
 
@@ -66,8 +102,8 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                     while char == ' ' or char == '\t':
                         # Turn tabs into spaces when the preference is spaces
                         if use_spaces and char == '\t':
-                            view.replace(edit, sublime.Region(pt, pt+1), ' ' *
-                                tab_size)
+                            view.replace(edit, sublime.Region(pt, pt + 1), ' ' *
+                                         tab_size)
 
                         # Turn spaces into tabs when tabs are the preference
                         if not use_spaces and char == ' ':
@@ -170,8 +206,29 @@ class AlignmentCommand(sublime_plugin.TextCommand):
 
                     if settings.get('mid_line_tabs') and not use_spaces:
                         adjustment += convert_to_mid_line_tabs(view, edit,
-                            tab_size, pt, length)
+                                                               tab_size, pt, length)
 
+        # # This handles aligning single multi-line selections
+        # print len(sel)
+        # for line in view.lines(sel[0]):
+        #     print '%d\n' % view.rowcol(line.a)[0]
+
+        # if len(sel) == 0:
+        #     region = sublime.Region(0, view.size())
+        #     code = view.substr(region)
+        #     for line_nums in get_blocks(code):
+        #         align_lines(line_nums)
+
+        if len(sel) == 1:
+            if len(view.lines(sel[0])) == 1:
+                region = sublime.Region(0, view.size())
+                code = view.substr(region)
+                for line_nums in get_blocks(code):
+                    align_lines(line_nums)
+            else:
+                points = []
+                line_nums = [view.rowcol(line.a)[0] for line in view.lines(sel[0])]
+                align_lines(line_nums)
 
         # This handles aligning multiple selections
         else:
