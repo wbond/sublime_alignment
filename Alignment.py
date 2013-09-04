@@ -85,6 +85,8 @@ class AlignmentCommand(sublime_plugin.TextCommand):
         use_spaces = settings.get('translate_tabs_to_spaces')
 
         def align_lines(line_nums):
+            points = []
+            max_col = 0
             trim_trailing_white_space = \
                 settings.get('trim_trailing_white_space_on_save')
 
