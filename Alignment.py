@@ -120,6 +120,9 @@ class AlignmentCommand(sublime_plugin.TextCommand):
             alignment_space_chars = settings.get('alignment_space_chars')
             if alignment_space_chars == None:
                 alignment_space_chars = []
+            space_after_chars = settings.get('space_after_chars')
+            if space_after_chars == None:
+                space_after_chars = []
 
             alignment_pattern = '|'.join([re.escape(ch) for ch in
                 alignment_chars])
@@ -152,6 +155,11 @@ class AlignmentCommand(sublime_plugin.TextCommand):
 
                     if view.substr(matching_char_pt) in alignment_space_chars:
                         space_pt += 1
+
+                    #space added after sign, if opted to
+                    if view.substr(matching_char_pt) in space_after_chars:
+                        if not view.substr(matching_char_pt+1) in [' ']:
+                            view.insert(edit, matching_char_pt+1, ' ')
 
                     # If the next equal sign is not on this line, skip the line
                     if view.rowcol(matching_char_pt)[0] != row:

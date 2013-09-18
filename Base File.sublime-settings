@@ -18,6 +18,10 @@
 	// before it in the final alignment
 	"alignment_space_chars": ["="],
 
+	// If the following character is matched for alignment, insert a space
+	// after it in the final alignment
+	"space_after_chars": ["="],
+
 	// The characters to align along with "alignment_chars"
 	// For instance if the = is to be aligned, there are a number of
 	// symbols that can be combined with the = to make an operator, and all
