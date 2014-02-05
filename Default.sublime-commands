@@ -3,7 +3,7 @@
         "caption": "Preferences: Alignment File Settings – Default",
         "command": "open_file",
         "args": {
-            "file": "${packages}/Terminal/Base File.sublime-settings"
+            "file": "${packages}/Alignment/Base File.sublime-settings"
         }
     },
     {
