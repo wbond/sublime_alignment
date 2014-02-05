@@ -64,5 +64,9 @@
             "file": "${packages}/User/Default (Linux).sublime-keymap",
             "platform": "Linux"
         }
+    },
+    {
+        "caption": "Alignment",
+        "command": "alignment"
     }
 ]
