@@ -111,6 +111,12 @@ class AlignmentCommand(sublime_plugin.TextCommand):
             alignment_chars = settings.get('alignment_chars')
             if alignment_chars == None:
                 alignment_chars = []
+
+            #use clipboard char as alignment char
+            clipboard_char = sublime.get_clipboard(2)
+            if len(clipboard_char) == 1:
+                alignment_chars.append(clipboard_char[0])
+
             alignment_prefix_chars = settings.get('alignment_prefix_chars')
             if alignment_prefix_chars == None:
                 alignment_prefix_chars = []
