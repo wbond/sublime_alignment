@@ -1,12 +1,12 @@
-= Sublime Alignment
+# Sublime Alignment
 
 A simple key-binding for aligning multi-line and multiple selections in
-[[http://sublimetext.com/2|Sublime Text 2]].
+[Sublime Text 2](http://sublimetext.com/2).
 
 Please see http://wbond.net/sublime_packages/alignment for install instructions,
 screenshots and documentation.
 
-== License
+## License
 
 All of Sublime Alignment is licensed under the MIT license.
 
