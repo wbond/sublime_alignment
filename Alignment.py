@@ -248,11 +248,32 @@ class AlignmentCommand(sublime_plugin.TextCommand):
 
         # This handles aligning multiple selections
         else:
-            max_col = max([normed_rowcol(view, region.b)[1] for region in sel])
-
-            for region in sel:
-                length = max_col - normed_rowcol(view, region.b)[1]
-                view.insert(edit, region.b, ' ' * length)
+            # BORDAIGORL: handle multiple regions by independently aligning the n-th cursor of each line
+            # Example (| is cursor position):
+            #    a|bbb|cc
+            #    AA|B|C
+            # turns into
+            #    a |bbb|c
+            #    AA|B  |C
+            col = {}
+            curline = view.rowcol(sel[0].begin())[0]
+            j=0
+            for i in range(0,len(sel)):
+                ln = view.rowcol(sel[i].begin())[0]
+                if ln != curline:
+                    j=0
+                    curline = ln
+                if j in col.keys():
+                    col[j].append(i)
+                else:
+                    col[j] = [i]
+                j+=1
+            for j in col.keys():
+                max_col = max([normed_rowcol(view, sel[i].b)[1] for i in col[j]])
+                for i in col[j]:
+                    region = sel[i]
+                    length = max_col - normed_rowcol(view, region.begin())[1]
+                    view.insert(edit, region.begin(), ' ' * length)
                 if settings.get('mid_line_tabs') and not use_spaces:
-                    convert_to_mid_line_tabs(view, edit, tab_size, region.b,
-                        length)
+                        convert_to_mid_line_tabs(view, edit, tab_size, region.begin(), length)
+
