@@ -12,7 +12,7 @@
 
 	// The mid-line characters to align in a multi-line selection, changing
 	// this to an empty array will disable mid-line alignment
-	"alignment_chars": ["="],
+	"alignment_chars": ["=", "&", "|"],
 
 	// If the following character is matched for alignment, insert a space
 	// before it in the final alignment
@@ -43,6 +43,8 @@
 	// ... or the default ...
 	//   background-color: black;
 	//   color           : white;
-	"alignment_format": "key-varspace-separator-value"
+	"alignment_format": "key-varspace-separator-value",
+
+	"declarations" : ["var", "let", "const"]
 
 }
