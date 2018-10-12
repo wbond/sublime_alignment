@@ -109,7 +109,7 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                     if trim_trailing_white_space and line.a == line.b:
                         continue
 
-                    verDef = re.search(r'(\s+(' + "|".join(settings.get('declarations')) + '))(\s+)', view.substr(line), re.I)
+                    verDef = re.search(r'(\s*(' + "|".join(settings.get('declarations')) + '))(\s+)', view.substr(line), re.I)
 
                     if verDef:
                         foundMax = True                      # if a declaration is present use that to align all the other rows
@@ -169,8 +169,10 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                     elif length < 0: # shifts text left
                         view.erase(edit, sublime.Region(pt + length, pt))
 
-                perform_mid_line = max_length == 0
-
+                # if foundMax == False:
+                #     perform_mid_line = max_length == 0
+                # else:
+                perform_mid_line = True
             else:
                 perform_mid_line = True
 
@@ -190,13 +192,15 @@ class AlignmentCommand(sublime_plugin.TextCommand):
             if space_after_chars == None:
                 space_after_chars = []
 
-            alignment_pattern = '|'.join([re.escape(ch) for ch in
-                alignment_chars])
+            alignment_pattern = '|'.join([re.escape(ch) for ch in alignment_chars])
 
+            # Align text after the alignment characters
             if perform_mid_line and alignment_chars:
-                points  = []
-                max_col = 0
+                points            = []
+                max_col           = 0
+                num_spaces_needed = 1
 
+                # go through all lines to analyze if there are multi character operators
                 for row in line_nums:
                     pt              = view.text_point(row, 0)
                     matching_region = view.find(alignment_pattern, pt)
@@ -207,10 +211,26 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                     matching_char_pt = matching_region.a
                     insert_pt        = matching_char_pt
 
-                    # If the equal sign is part of a multi-character
-                    # operator, bring the first character forward also
                     if view.substr(insert_pt - 1) in alignment_prefix_chars:
-                        insert_pt -= 1
+                        num_spaces_needed = 2
+
+
+                for row in line_nums:
+                    curr_multi_char_op = False
+                    pt                 = view.text_point(row, 0)
+                    matching_region    = view.find(alignment_pattern, pt)
+
+                    if not matching_region:
+                        continue
+
+                    matching_char_pt = matching_region.a
+                    end_matching_pt  = view.line(matching_char_pt).b
+                    insert_pt        = matching_char_pt
+
+                    # If the equal sign is part of a multi-character operator, bring the first character forward also
+                    if view.substr(insert_pt - 1) in alignment_prefix_chars:
+                        curr_multi_char_op =  True
+                        insert_pt          -= 1
 
                     space_pt = insert_pt
                     while view.substr(space_pt - 1) in [' ', '\t']:
@@ -225,10 +245,25 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                     if view.substr(matching_char_pt) in alignment_space_chars:
                         space_pt += 1
 
-                    #space added after sign, if opted to
+                    # space added after sign, if opted to
                     if view.substr(matching_char_pt) in space_after_chars:
-                        if not view.substr(matching_char_pt + 1) in [' ']:
-                            view.insert(edit, matching_char_pt + 1, ' ')
+                        char_after_op = matching_char_pt + 1
+
+                        if not view.substr(char_after_op) in [' ']:
+                            if curr_multi_char_op:
+                                view.insert(edit, char_after_op, ' ' * 1)
+                            else:
+                                view.insert(edit, char_after_op, ' ' * num_spaces_needed)
+                        else:
+                            extra_spaces = re.search(r'(^\s+)', view.substr(sublime.Region(char_after_op, end_matching_pt)), re.I)
+                            if extra_spaces:
+                                if len(extra_spaces.group()) > num_spaces_needed:
+                                    # case where it is a space, we want to truncate if there are too many
+                                    view.erase(edit, sublime.Region(char_after_op, char_after_op + len(extra_spaces.group()) - num_spaces_needed))
+                                elif num_spaces_needed == 2 and not curr_multi_char_op:
+                                    # multi character operator (+=, *=, etc.)
+                                    view.insert(edit, char_after_op, ' ')
+
 
                     # If the next equal sign is not on this line, skip the line
                     if view.rowcol(matching_char_pt)[0] != row:
@@ -248,10 +283,10 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                     if pt == -1:
                         continue
 
-                    textStart  = view.text_point(line_nums[row], 0)
+                    textStart  =  view.text_point(line_nums[row], 0)
                     row        += 1
                     pt         += adjustment
-                    length     = max_col - normed_rowcol(view, pt)[1]
+                    length     =  max_col - normed_rowcol(view, pt)[1]
                     adjustment += length
 
                     if length >= 0:

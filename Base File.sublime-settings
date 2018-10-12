@@ -12,15 +12,15 @@
 
 	// The mid-line characters to align in a multi-line selection, changing
 	// this to an empty array will disable mid-line alignment
-	"alignment_chars": ["=", "&", "|"],
+	"alignment_chars": ["=", "&", "|", ":"],
 
 	// If the following character is matched for alignment, insert a space
 	// before it in the final alignment
-	"alignment_space_chars": ["="],
+	"alignment_space_chars": ["=", ":"],
 
 	// If the following character is matched for alignment, insert a space
 	// after it in the final alignment
-	"space_after_chars": ["="],
+	"space_after_chars": ["=", ":"],
 
 	// The characters to align along with "alignment_chars"
 	// For instance if the = is to be aligned, there are a number of
@@ -41,9 +41,9 @@
 	// "alignment_format": "varspace-key-separator-value"
 
 	// ... or the default ...
-	//   background-color: black;
-	//   color           : white;
-	"alignment_format": "key-varspace-separator-value",
+	//   background-color : black;
+	//   color            : white;
+	"alignment_format" : "key-varspace-separator-value",
 
 	"declarations" : ["var", "let", "const"]
 
