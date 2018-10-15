@@ -299,7 +299,7 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                         adjustment += convert_to_mid_line_tabs(view, edit, tab_size, pt, length)
 
         if len(sel) == 1:
-            if len(view.lines(sel[0])) == 1:
+            if settings.get('whole_file_one_line') and len(view.lines(sel[0])) == 1:
                 region = sublime.Region(0, view.size())
                 code   = view.substr(region)
                 for line_nums in get_blocks(code):

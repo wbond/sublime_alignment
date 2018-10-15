@@ -45,6 +45,10 @@
 	//   color            : white;
 	"alignment_format" : "key-varspace-separator-value",
 
-	"declarations" : ["var", "let", "const"]
+	// words to consider declarations of variables,
+	// aligns left edge based on the variable name and not the declarations listed here (only if they are on the first row)
+	"declarations"        : ["var", "let", "const"],
 
+	// enable/disable whole file aligning (buggy for bigger files currently)
+	"whole_file_one_line" : false
 }
