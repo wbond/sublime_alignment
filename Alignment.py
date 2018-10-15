@@ -169,12 +169,8 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                     elif length < 0: # shifts text left
                         view.erase(edit, sublime.Region(pt + length, pt))
 
-                # if foundMax == False:
-                #     perform_mid_line = max_length == 0
-                # else:
-                perform_mid_line = True
-            else:
-                perform_mid_line = True
+            # in both cases perform mid line alignment
+            perform_mid_line = True
 
             alignment_chars = settings.get('alignment_chars')
             if alignment_chars == None:
