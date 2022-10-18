@@ -1,9 +1,13 @@
 import sublime
+from sublime import Region
 import sublime_plugin
 import re
 import math
 import os
 import sys
+from functools import reduce
+
+# print(sys.version)
 
 try:
     from Default.indentation import line_and_normed_pt as normed_rowcol
@@ -188,7 +192,22 @@ class AlignmentCommand(sublime_plugin.TextCommand):
             if space_after_chars == None:
                 space_after_chars = []
 
-            alignment_pattern = '|'.join([re.escape(ch) for ch in alignment_chars])
+            def escapeIt(n):
+                return re.escape(n)
+
+            alignment_chars = map(escapeIt, alignment_chars)
+            # print("alignment chars", alignment_chars)
+            ignore_pattern = r"""(?:\s*?)(?:'|")(?:.*?)(?:'|")"""
+            alignment_pattern = "|".join(alignment_chars)
+            # print("ignore_pattern", ignore_pattern)
+            # print("alignment_pattern", alignment_pattern)
+
+
+            # def add(x, y):
+            #     return x + "|" + y
+
+            # print(type(alignment_pattern))
+            # print(alignment_pattern)
 
             # Align text after the alignment characters
             if perform_mid_line and alignment_chars:
@@ -199,7 +218,28 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                 # go through all lines to analyze if there are multi character operators
                 for row in line_nums:
                     pt              = view.text_point(row, 0)
-                    matching_region = view.find(alignment_pattern, pt)
+                    endPoint        = view.text_point(row, 10000, clamp_column=True)
+
+                    matching_region = Region(pt, endPoint)
+                    # print("region to match ", view.substr(matching_region))
+                    matched = re.match(ignore_pattern, view.substr(matching_region))
+                    # print(matched)
+                    if matched == None:
+                        offset = 0
+                    else:
+                        offset = matched.end(0)
+                    # matching_region = Region(pt + matched.end(0), endPoint)
+                    matching_region = view.find(alignment_pattern, pt + offset)
+                    # print("mid-line first match, whole row", view.substr(matching_region))
+                    # print(matching_region)
+                    # print('Matched string 0:',matched.group(0))
+                    # print('Matched string 1:',matched.group(1))
+                    # print('Starting position:', matched.start(1))
+                    # print('Ending position:',matched.end(1))
+                    # print('Positions:',matched.span(1))
+                    # print(matched.groups())
+
+
 
                     if not matching_region:
                         continue
@@ -214,7 +254,24 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                 for row in line_nums:
                     curr_multi_char_op = False
                     pt                 = view.text_point(row, 0)
-                    matching_region    = view.find(alignment_pattern, pt)
+                    endPoint           = view.text_point(row, 10000, clamp_column=True)
+
+                    matching_region = Region(pt, endPoint)
+                    # matching_region = view.find(alignment_pattern, pt)
+                    # print("alignment pattern", alignment_pattern)
+                    # print("first match, whole row", view.substr(matching_region))
+                    matched = re.match(ignore_pattern, view.substr(matching_region))
+                    if matched == None:
+                        offset = 0
+                    else:
+                        offset = matched.end(0)
+
+                    matching_region = view.find(alignment_pattern, pt + offset)
+                    # print("right one first match, whole row", view.substr(matching_region))
+                    # print(matched.group(1))
+                    # matching_region = Region(pt + matched.start(0), pt + matched.end(0))
+                    # print(matching_region)
+                    # matching_region    = view.find(alignment_pattern, pt)
 
                     if not matching_region:
                         continue
@@ -223,9 +280,10 @@ class AlignmentCommand(sublime_plugin.TextCommand):
                     end_matching_pt  = view.line(matching_char_pt).b
                     insert_pt        = matching_char_pt
 
+                    # print(view.substr(insert_pt - 1))
                     # If the equal sign is part of a multi-character operator, bring the first character forward also
                     if view.substr(insert_pt - 1) in alignment_prefix_chars:
-                        curr_multi_char_op =  True
+                        curr_multi_char_op  = True
                         insert_pt          -= 1
 
                     space_pt = insert_pt
